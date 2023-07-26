@@ -1,27 +1,20 @@
 {config, pkgs, ...}:
 
 let 
-  kubeMasterIP = "10.1.1.2";
-  kubeNodeIP = "10.1.1.3";
+  netspec = import ./network-spec.nix;
   kubeMasterHostName = "kube-master";
   kubeMasterAPIServerPort = 6443;
   kubeApi = "https://${kubeMasterHostName}:${toString kubeMasterAPIServerPort}";
 in {
-  networking.nat = {
-    enable = true;
-    internalInterfaces = ["ve-+"];
-    externalInterface = "ens3";
-    enableIPv6 = true;
-  };
 
   containers.kubernetesMaster = {
     autoStart = true;
     privateNetwork = true;
-    hostAddress = "10.0.2.15";
-    localAddress = kubeMasterIP; 
+    hostAddress = netspec.host.ip; 
+    localAddress = netspec.kube.master.ip;
     config = { config, pkgs, ... }: {
 
-      networking.extraHosts = "${kubeMasterIP} ${kubeMasterHostName}";
+      networking.extraHosts = "${netspec.kube.master.ip} ${kubeMasterHostName}";
       system.stateVersion = "23.11";
   
       environment.systemPackages = with pkgs; [
@@ -40,7 +33,7 @@ in {
 
         apiserver = {
           securePort = kubeMasterAPIServerPort;
-          advertiseAddress = kubeMasterIP;
+          advertiseAddress = netspec.kube.master.ip;
         };
       };
     }; 
@@ -49,10 +42,10 @@ in {
   containers.kubernetesNode = {
     autoStart = true;
     privateNetwork = true;
-    hostAddress = "10.0.2.15";
-    localAddress = kubeNodeIP; 
+    hostAddress = netspec.host.ip; 
+    localAddress = netspec.kube.node.ip; 
     config = { config, pkgs, ...}: {
-      networking.extraHosts = "${kubeMasterIP} ${kubeMasterHostName}";
+      networking.extraHosts = "${netspec.kube.master.ip} ${kubeMasterHostName}";
       system.stateVersion = "23.11";
       environment.etc."resolve.conf".text = "nameserver 8.8.8.8";
       environment.systemPackages = with pkgs; [
