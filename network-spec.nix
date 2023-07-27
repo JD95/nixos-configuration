@@ -1,6 +1,11 @@
 rec {
   host = { ip = "10.0.2.15"; };
 
+  hydra = {
+    ip = "localhost";
+    port = "3000";
+  };
+
   kube = {
     master = { ip = "10.1.1.2"; };
 
@@ -9,6 +14,10 @@ rec {
 
   fitnessServer = {
     ci = { ip = "10.1.1.4"; };
+  };
+
+  scratchWork = {
+    ip = "10.1.1.5";
   };
 
   forwardPorts = [ 

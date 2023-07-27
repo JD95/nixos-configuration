@@ -9,6 +9,10 @@ in {
   # replicates the default behaviour.
   networking.useDHCP = false;
   networking.interfaces.enp0s3.useDHCP = true;
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 3000 ];
+  };
   networking.nat = {
     enable = true;
     internalInterfaces = ["ve-+"];

@@ -8,10 +8,12 @@
       ./ssh.nix
       ./project-ci.nix
       ./networking.nix
+      ./hydra.nix
     ];
 
   nix = {
     package = pkgs.nixFlakes;
+    settings.sandbox = "relaxed";
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
