@@ -4,11 +4,12 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./kubernetes.nix
+      # ./kubernetes.nix
       ./ssh.nix
       ./project-ci.nix
       ./networking.nix
       ./hydra.nix
+      ./docker-registry.nix
     ];
 
   nix = {
@@ -25,12 +26,14 @@
 
   users.users.jeff = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; 
+    extraGroups = [ "wheel" "docker" ]; 
   };
+
+  users.extraGroups.docker.members = ["jeff"];
 
   environment.systemPackages = with pkgs; [
     git wget curl vim tmux lsof inetutils strace
-    watch jq
+    watch jq skopeo 
   ];
 
   system.stateVersion = "20.09"; 

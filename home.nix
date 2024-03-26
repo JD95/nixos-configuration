@@ -11,6 +11,8 @@
     enableCompletion = true;
     bashrcExtra = ''
       export EDITOR="vim"
+      export HYDRA_DBI="dbi:Pg:dbname=hydra;host=localhost;user=hydra"
+      export HYDRA_DATA="/var/lib/hydra"
     '';
   };
   programs.git = {

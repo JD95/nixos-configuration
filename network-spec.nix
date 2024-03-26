@@ -12,6 +12,8 @@ rec {
     node = { ip = "10.1.1.3"; };
   };
 
+  docker-registry = { port = 3001; };
+
   fitnessServer = {
     ci = { ip = "10.1.1.4"; };
   };
