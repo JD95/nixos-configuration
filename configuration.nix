@@ -34,7 +34,7 @@
 
   environment.systemPackages = with pkgs; [
     git wget curl vim tmux lsof inetutils strace
-    watch jq skopeo 
+    watch jq skopeo ssh-to-age sops 
   ];
 
   system.stateVersion = "20.09"; 
