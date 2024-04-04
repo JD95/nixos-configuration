@@ -8,6 +8,12 @@ in {
     notificationSender = "hydra@localhost";
     buildMachinesFiles = [];
     useSubstitutes = true;
+    extraConfig = ''
+      <dynamicruncommand>
+        enable = 1
+      </dynamicruncommand>
+    '';
+    
   };
 
 }

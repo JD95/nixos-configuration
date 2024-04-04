@@ -11,11 +11,16 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
   inputs.nix-bundle.url = "github:NixOS/bundlers";
+  
+  inputs.sops-nix = {
+    url = "github:mic92/sops-nix";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
 
   inputs.home-manager.url = "github:nix-community/home-manager";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = all@{ self, nixpkgs, home-manager, nix-bundle, ... }: {
+  outputs = all@{ self, nixpkgs, sops-nix, home-manager, nix-bundle, ... }: {
 
     # Utilized by `nix bundle -- .#<name>` (should be a .drv input, not program path?)
     bundlers.x86_64-linux.example = nix-bundle.bundlers.x86_64-linux.toArx;
@@ -41,6 +46,8 @@
       system = "x86_64-linux";
       modules = [
         ./configuration.nix
+
+        sops-nix.nixosModules.sops
 
         home-manager.nixosModules.home-manager {
           home-manager.useGlobalPkgs = true;

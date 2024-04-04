@@ -10,6 +10,7 @@
       ./networking.nix
       ./hydra.nix
       ./docker-registry.nix
+      ./cron.nix
     ];
 
   nix = {
