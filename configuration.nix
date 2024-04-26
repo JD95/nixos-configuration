@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, specialArgs, ... }:
 
-{
+let 
+  from-flakes = specialArgs.from-flakes;
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -34,7 +36,7 @@
 
   environment.systemPackages = with pkgs; [
     git wget curl vim tmux lsof inetutils strace
-    watch jq skopeo ssh-to-age sops 
+    watch jq skopeo ssh-to-age sops from-flakes.nix-inspect 
   ];
 
   system.stateVersion = "20.09"; 

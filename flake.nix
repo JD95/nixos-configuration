@@ -19,8 +19,10 @@
 
   inputs.home-manager.url = "github:nix-community/home-manager";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
+ 
+  inputs.nix-inspect.url = "github:bluskript/nix-inspect";
 
-  outputs = all@{ self, nixpkgs, sops-nix, home-manager, nix-bundle, ... }: {
+  outputs = inputs@{ self, nixpkgs, sops-nix, home-manager, nix-bundle, ... }: {
 
     # Utilized by `nix bundle -- .#<name>` (should be a .drv input, not program path?)
     bundlers.x86_64-linux.example = nix-bundle.bundlers.x86_64-linux.toArx;
@@ -28,22 +30,16 @@
     # Utilized by `nix bundle -- .#<name>`
     defaultBundler.x86_64-linux = self.bundlers.x86_64-linux.example;
 
-    # Default overlay, for use in dependent flakes
-    overlay = final: prev: { };
-
-    # # Same idea as overlay but a list or attrset of them.
-    overlays = { exampleOverlay = self.overlay; };
-
-    # Default module, for use in dependent flakes
-    nixosModule = { config, ... }: { options = {}; config = {}; };
-
-    # Same idea as nixosModule but a list or attrset of them.
-    nixosModules = { exampleModule = self.nixosModule; };
-
     # Used with `nixos-rebuild --flake .#<hostname>`
     # nixosConfigurations."<hostname>".config.system.build.toplevel must be a derivation
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      # Provide inputs to modules
+      specialArgs = { 
+        from-flakes = {
+          nix-inspect = inputs.nix-inspect.packages.x86_64-linux.default;
+        };
+      };
       modules = [
         ./configuration.nix
 
