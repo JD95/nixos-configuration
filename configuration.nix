@@ -37,6 +37,7 @@ in {
   environment.systemPackages = with pkgs; [
     git wget curl vim tmux lsof inetutils strace
     watch jq skopeo ssh-to-age sops from-flakes.nix-inspect 
+    nixos-generators
   ];
 
   system.stateVersion = "20.09"; 
