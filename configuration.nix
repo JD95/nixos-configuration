@@ -6,13 +6,13 @@ in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      # ./kubernetes.nix
       ./ssh.nix
       ./project-ci.nix
       ./networking.nix
       ./hydra.nix
       ./docker-registry.nix
       ./cron.nix
+      ./sops.nix
     ];
 
   nix = {

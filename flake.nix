@@ -1,26 +1,26 @@
 {
-  description = "A template that shows all standard flake outputs";
+  description = "Configuration for my home vm";
 
-  # Inputs
-  # https://nixos.org/manual/nix/unstable/command-ref/new-cli/nix3-flake.html#flake-inputs
+  inputs = {
 
-  # The nixpkgs entry in the flake registry.
-  inputs.nixpkgsRegistry.url = "nixpkgs";
+    nixpkgsRegistry.url = "nixpkgs";
 
-  # to be equal to the nixpkgs input of the nixops input of the top-level flake:
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  inputs.nix-bundle.url = "github:NixOS/bundlers";
+    nix-bundle.url = "github:NixOS/bundlers";
   
-  inputs.sops-nix = {
-    url = "github:mic92/sops-nix";
-    inputs.nixpkgs.follows = "nixpkgs";
-  };
+    sops-nix = {
+      url = "github:mic92/sops-nix?rev=7f49111254333bda6881b0dfa8cf7d82fe305f93";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-  inputs.home-manager.url = "github:nix-community/home-manager";
-  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
  
-  inputs.nix-inspect.url = "github:bluskript/nix-inspect";
+    nix-inspect.url = "github:bluskript/nix-inspect";
+  };
 
   outputs = inputs@{ self, nixpkgs, sops-nix, home-manager, nix-bundle, ... }: {
 
